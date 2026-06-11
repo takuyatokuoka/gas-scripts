@@ -23,7 +23,12 @@ function createSummaryDashboard() {
   var summarySheet = getOrCreateSheet(ss, SHEET_SUMMARY);
 
   if (!dataSheet) {
-    throw new Error('「' + SHEET_DATA + '」シートが見つかりません。');
+    // シートが存在しない場合はアラートで案内して処理を中断する
+    SpreadsheetApp.getUi().alert(
+      '「' + SHEET_DATA + '」シートが見つかりません。\n\n' +
+      'insertSampleData() を先に実行してシートを作成してください。'
+    );
+    return;
   }
 
   // 売上データを月ごとに集計する
