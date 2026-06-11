@@ -186,6 +186,51 @@ function setupDailyTrigger() {
   Logger.log('毎朝9時のトリガーを登録しました。');
 }
 
+// ===== テスト用サンプルデータ =====
+
+/**
+ * 「売上データ」シートを作成してサンプルデータを挿入する。
+ *
+ * 使い方：
+ *   GAS エディタでこの関数を一度だけ手動実行してください。
+ *   既存の「売上データ」シートがある場合は内容を上書きします。
+ *   動作確認が済んだら実データに差し替えてください。
+ */
+function insertSampleData() {
+  var ss        = SpreadsheetApp.getActiveSpreadsheet();
+  var dataSheet = getOrCreateSheet(ss, SHEET_DATA);
+
+  // シートを全クリアしてからヘッダーとサンプルデータを書き込む
+  dataSheet.clearContents();
+
+  var header = [['日付', '担当者名', '商品名', '金額']];
+  var rows = [
+    [new Date('2026/01/05'), '田中', '商品A',  50000],
+    [new Date('2026/01/15'), '鈴木', '商品B',  30000],
+    [new Date('2026/01/28'), '田中', '商品C',  70000],
+    [new Date('2026/02/03'), '佐藤', '商品A',  45000],
+    [new Date('2026/02/14'), '鈴木', '商品D',  90000],
+    [new Date('2026/02/20'), '田中', '商品B',  60000],
+    [new Date('2026/03/07'), '佐藤', '商品C',  38000],
+    [new Date('2026/03/19'), '田中', '商品A',  82000],
+    [new Date('2026/03/25'), '鈴木', '商品D', 110000],
+    [new Date('2026/04/02'), '佐藤', '商品B',  55000],
+    [new Date('2026/04/18'), '田中', '商品C',  67000],
+    [new Date('2026/05/09'), '鈴木', '商品A',  48000],
+    [new Date('2026/05/22'), '佐藤', '商品D',  95000],
+  ];
+
+  dataSheet.getRange(1, 1, 1, 4).setValues(header);
+  dataSheet.getRange(2, 1, rows.length, 4).setValues(rows);
+
+  // 日付列を見やすい書式に設定
+  dataSheet.getRange(2, 1, rows.length, 1).setNumberFormat('yyyy/mm/dd');
+  // 金額列を通貨書式に設定
+  dataSheet.getRange(2, 4, rows.length, 1).setNumberFormat('¥#,##0');
+
+  Logger.log('サンプルデータを挿入しました（' + rows.length + '件）。');
+}
+
 // ===== ユーティリティ =====
 
 /**
